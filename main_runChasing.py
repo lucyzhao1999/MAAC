@@ -3,7 +3,6 @@ import torch
 import os
 import sys
 dirName = os.path.dirname(__file__)
-
 from gym.spaces import Box, Discrete
 from pathlib import Path
 from torch.autograd import Variable
@@ -96,13 +95,11 @@ def run(config):
 
     initObsForParams = observe(reset())
     envObservationSpace = [initObsForParams[obsID].shape for obsID in range(len(initObsForParams))]
-    # <class 'list'>: [Box(16,), Box(16,), Box(16,), Box(14,)]
 
     worldDim = 2
     envActionSpace = [spaces.Discrete(worldDim * 2 + 1) for agentID in range(numAgents)]
 
     model_dir = os.path.join(dirName, 'models', config.env_id, config.model_name)
-
     model = AttentionSAC.init_from_env(envActionSpace, envObservationSpace,
                                        tau=config.tau, pi_lr=config.pi_lr, q_lr=config.q_lr,
                                        gamma=config.gamma, pol_hidden_dim=config.pol_hidden_dim,#128
