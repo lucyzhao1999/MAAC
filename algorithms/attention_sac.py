@@ -136,8 +136,8 @@ class AttentionSAC(object):
         torch.save(save_dict, filename)
 
     @classmethod
-    def init_from_env(cls, env, gamma=0.95, tau=0.01, pi_lr=0.01, q_lr=0.01,
-                      reward_scale=10., pol_hidden_dim=128, critic_hidden_dim=128, attend_heads=4, **kwargs):
+    def init_from_env(cls, envActionSpace, envObservationSpace, gamma=0.95, tau=0.01, pi_lr=0.01, q_lr=0.01,
+                      reward_scale=10., pol_hidden_dim=128, critic_hidden_dim=128, attend_heads=4):
         """
         Instantiate instance of this class from multi-agent environment
 
@@ -149,9 +149,11 @@ class AttentionSAC(object):
         """
         agent_init_params = []
         sa_size = []
-        for acsp, obsp in zip(env.action_space, env.observation_space):
-            agent_init_params.append({'num_in_pol': obsp.shape[0], 'num_out_pol': acsp.n})
-            sa_size.append((obsp.shape[0], acsp.n))
+        for acsp, obsp in zip(envActionSpace, envObservationSpace):
+            obsShape = obsp[0] if isinstance(obsp, tuple) else obsp.shape[0]
+            agent_init_params.append({'num_in_pol': obsShape, 'num_out_pol': acsp.n})
+            sa_size.append((obsShape, acsp.n))
+
 
         init_dict = {'gamma': gamma, 'tau': tau, 'pi_lr': pi_lr, 'q_lr': q_lr, 'reward_scale': reward_scale,
                      'pol_hidden_dim': pol_hidden_dim, 'critic_hidden_dim': critic_hidden_dim,
