@@ -40,7 +40,7 @@ def makeMultiAgentEnv():
 
 def run(config):
 
-    numWolves = 3
+    numWolves = 4
     numSheep = 1
     numBlocks = 2
     numAgents = numWolves + numSheep
