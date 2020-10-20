@@ -104,11 +104,11 @@ def run(config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--env_id", default="simple_tag", type=str)
-    parser.add_argument("--model_name", default="chasing", type=str)
-    parser.add_argument("--n_rollout_threads", default=1, type=int)# 12
+    parser.add_argument("--model_name", default="chasing3v1", type=str)
+    parser.add_argument("--n_rollout_threads", default=12, type=int)# 12
     parser.add_argument("--buffer_length", default=int(1e6), type=int)
     parser.add_argument("--n_episodes", default=60000, type=int)
-    parser.add_argument("--episode_length", default=25, type=int)
+    parser.add_argument("--episode_length", default=75, type=int)
     parser.add_argument("--steps_per_update", default=100, type=int)
     parser.add_argument("--num_updates", default=4, type=int, help="Number of updates per update cycle")
     parser.add_argument("--batch_size", default=1024, type=int, help="Batch size for training")

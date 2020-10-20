@@ -112,19 +112,27 @@ class Scenario(BaseScenario):
         return rew
 
     def adversary_reward(self, agent, world):
+        individualReward = False
+
         # Adversaries are rewarded for collisions with agents
         rew = 0
         shape = False
         agents = self.good_agents(world)
         adversaries = self.adversaries(world)
+        numAdversaries = len(adversaries)
+
         if shape:  # reward can optionally be shaped (decreased reward for increased distance from agents)
             for adv in adversaries:
                 rew -= 0.1 * min([np.sqrt(np.sum(np.square(a.state.p_pos - adv.state.p_pos))) for a in agents])
         if agent.collide:
             for ag in agents:
-                for adv in adversaries:
-                    if self.is_collision(ag, adv):
+                if individualReward:
+                    if self.is_collision(ag, agent):
                         rew += 10
+                else:
+                    for adv in adversaries:
+                        if self.is_collision(ag, adv):
+                            rew += 10/numAdversaries
         return rew
 
     def observation(self, agent, world):
