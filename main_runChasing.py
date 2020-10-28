@@ -4,39 +4,16 @@ import os
 import sys
 dirName = os.path.dirname(__file__)
 from gym.spaces import Box, Discrete
-from pathlib import Path
 from torch.autograd import Variable
-from utils.make_env import make_env
 from utils.buffer import ReplayBuffer
-from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
 from algorithms.attention_sac import AttentionSAC
 from visualize.visualizeMultiAgent import *
 from environment.chasingEnv.multiAgentEnv import *
 from gym import spaces
+import json
 
 getPosFromAgentState = lambda state: np.array([state[0], state[1]])
 
-
-def make_parallel_env(env_id, n_rollout_threads, seed):
-    def get_env_fn(rank):
-        def init_env():
-            env = make_env(env_id, discrete_action=True)
-            env.seed(seed + rank * 1000)
-            np.random.seed(seed + rank * 1000)
-            return env
-        return init_env
-    if n_rollout_threads == 1:
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        return SubprocVecEnv([get_env_fn(i) for i in range(n_rollout_threads)])
-
-def makeMultiAgentEnv():
-    from multiagent.environmentForChasing import MultiAgentEnv
-    import multiagent.scenarios as scenarios
-    scenario = scenarios.load("simple_tag.py").Scenario()
-    world = scenario.make_world()
-    env = MultiAgentEnv(world, scenario.reset_world, scenario.reward, scenario.observation)
-    return env
 
 def run(config):
 

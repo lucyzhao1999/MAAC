@@ -16,7 +16,7 @@ getPosFromAgentState = lambda state: np.array([state[0], state[1]])
 
 
 def main():
-    debug = 0
+    debug = 1
     if debug:
         numWolves = 3
         numSheep = 1
